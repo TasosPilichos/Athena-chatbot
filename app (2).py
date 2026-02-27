@@ -1,23 +1,5 @@
-import subprocess
-import sys
-
-# ── Auto-install missing dependencies ────────────────────────────────────────
-def install(package):
-    subprocess.check_call([sys.executable, "-m", "pip", "install", package, "--break-system-packages"])
-
-try:
-    import streamlit as st
-except ImportError:
-    print("Installing streamlit...")
-    install("streamlit")
-    import streamlit as st
-
-try:
-    import anthropic
-except ImportError:
-    print("Installing anthropic...")
-    install("anthropic")
-    import anthropic
+import streamlit as st
+import anthropic
 
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(page_title="Athena Chat", page_icon="🦉", layout="centered")
@@ -266,12 +248,8 @@ with st.sidebar:
     )
     st.markdown("---")
 
-    if key_source == "sidebar":
-        api_key = st.text_input("Anthropic API Key", type="password", placeholder="sk-ant-...")
-        st.markdown("---")
-    else:
-        st.markdown("🔑 **API key loaded**")
-        st.markdown("---")
+    st.markdown("🔑 **Powered by Claude AI**")
+    st.markdown("---")
 
     st.markdown("### 🎓 Teaching Assistant")
     st.markdown("*Athena guides you with patience, clarity, and wisdom.*")
@@ -330,7 +308,7 @@ for msg in st.session_state.messages:
 # ── Chat input ────────────────────────────────────────────────────────────────
 if prompt := st.chat_input("Ask Athena anything…"):
     if not api_key:
-        st.error("Please enter your Anthropic API key in the sidebar.")
+        st.error("⚠️ API key not configured. Please contact the administrator.")
         st.stop()
 
     st.session_state.messages.append({"role": "user", "content": prompt})
